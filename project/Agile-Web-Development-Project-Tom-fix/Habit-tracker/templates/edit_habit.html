@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Goal - Habit Tracker</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" href="/">Habit Tracker</a>
+        <div>
+            <a class="btn btn-light btn-sm" href="/">Home</a>
+            <a class="btn btn-light btn-sm" href="/contact">Contact</a>
+            <a class="btn btn-light btn-sm" href="/dashboard">Dashboard</a>
+            <a class="btn btn-light btn-sm" href="/active_habits">Active Habits</a>
+            <a class="btn btn-light btn-sm" href="/calendar">Calendar</a>
+            <a class="btn btn-light btn-sm" href="/friends">Friends</a>
+            <a class="btn btn-light btn-sm" href="/stats">Stats</a>
+            <a class="btn btn-light btn-sm" href="/profile">Profile</a>
+            <a class="btn btn-light btn-sm" href="/reward">Rewards</a>
+            <a class="btn btn-danger btn-sm" href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+
+    <div class="edit-habit-hero">
+        <div>
+            <span class="edit-habit-badge">Edit Goal</span>
+            <h1>Update Your Habit</h1>
+            <p>Change your habit details, target, priority, and notes.</p>
+        </div>
+
+        <a href="/dashboard" class="btn btn-light">Back to Dashboard</a>
+    </div>
+
+    <div class="edit-habit-card mt-4">
+        <form method="POST">
+
+            <div class="mb-4">
+                <label class="form-label">Habit / Goal Name</label>
+                <input
+                    type="text"
+                    name="habit_name"
+                    class="form-control edit-input"
+                    value="{{ habit[1] }}"
+                    required
+                >
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Category</label>
+                    <select name="category" class="form-control edit-input">
+                        <option value="Health" {% if habit[2] == "Health" %}selected{% endif %}>Health</option>
+                        <option value="Fitness" {% if habit[2] == "Fitness" %}selected{% endif %}>Fitness</option>
+                        <option value="Study" {% if habit[2] == "Study" %}selected{% endif %}>Study</option>
+                        <option value="Work" {% if habit[2] == "Work" %}selected{% endif %}>Work</option>
+                        <option value="Personal" {% if habit[2] == "Personal" %}selected{% endif %}>Personal</option>
+                        <option value="General" {% if habit[2] == "General" %}selected{% endif %}>General</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <label class="form-label">Priority</label>
+                    <select name="priority" class="form-control edit-input">
+                        <option value="High" {% if habit[4] == "High" %}selected{% endif %}>High</option>
+                        <option value="Medium" {% if habit[4] == "Medium" %}selected{% endif %}>Medium</option>
+                        <option value="Low" {% if habit[4] == "Low" %}selected{% endif %}>Low</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="edit-goal-box mb-4">
+                <h4>Habit Schedule</h4>
+                <p>Choose the days this habit should appear. Leave all unchecked for an everyday habit.</p>
+
+                <div class="weekday-selector">
+                    <label class="weekday-option">
+                        <input type="checkbox" name="schedule" value="Mon" {% if "Mon" in selected_schedule %}checked{% endif %}>
+                        <span>Mon</span>
+                    </label>
+
+                    <label class="weekday-option">
+                        <input type="checkbox" name="schedule" value="Tue" {% if "Tue" in selected_schedule %}checked{% endif %}>
+                        <span>Tue</span>
+                    </label>
+
+                    <label class="weekday-option">
+                        <input type="checkbox" name="schedule" value="Wed" {% if "Wed" in selected_schedule %}checked{% endif %}>
+                        <span>Wed</span>
+                    </label>
+
+                    <label class="weekday-option">
+                        <input type="checkbox" name="schedule" value="Thu" {% if "Thu" in selected_schedule %}checked{% endif %}>
+                        <span>Thu</span>
+                    </label>
+
+                    <label class="weekday-option">
+                        <input type="checkbox" name="schedule" value="Fri" {% if "Fri" in selected_schedule %}checked{% endif %}>
+                        <span>Fri</span>
+                    </label>
+
+                    <label class="weekday-option">
+                        <input type="checkbox" name="schedule" value="Sat" {% if "Sat" in selected_schedule %}checked{% endif %}>
+                        <span>Sat</span>
+                    </label>
+
+                    <label class="weekday-option">
+                        <input type="checkbox" name="schedule" value="Sun" {% if "Sun" in selected_schedule %}checked{% endif %}>
+                        <span>Sun</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="edit-goal-box mb-4">
+                <h4>Goal Target</h4>
+                <p>Set a clear measurable target for this habit.</p>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Target Number</label>
+                        <input
+                            type="number"
+                            step="0.1"
+                            name="target_value"
+                            class="form-control edit-input"
+                            value="{{ habit[5] }}"
+                            required
+                        >
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Target Unit</label>
+                        <select name="target_unit" class="form-control edit-input">
+                            <option value="times" {% if habit[6] == "times" %}selected{% endif %}>Times</option>
+                            <option value="minutes" {% if habit[6] == "minutes" %}selected{% endif %}>Minutes</option>
+                            <option value="hours" {% if habit[6] == "hours" %}selected{% endif %}>Hours</option>
+                            <option value="steps" {% if habit[6] == "steps" %}selected{% endif %}>Steps</option>
+                            <option value="km" {% if habit[6] == "km" %}selected{% endif %}>Kilometres</option>
+                            <option value="litres" {% if habit[6] == "litres" %}selected{% endif %}>Litres</option>
+                            <option value="pages" {% if habit[6] == "pages" %}selected{% endif %}>Pages</option>
+                            <option value="tasks" {% if habit[6] == "tasks" %}selected{% endif %}>Tasks</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Notes</label>
+                <textarea
+                    name="notes"
+                    class="form-control edit-input"
+                    rows="4"
+                >{{ habit[7] }}</textarea>
+            </div>
+
+            <div class="edit-created-box mb-4">
+                <strong>Created Date:</strong> {{ habit[8] }}
+            </div>
+
+            <div class="d-flex gap-2">
+                <button class="btn btn-primary">Save Changes</button>
+                <a href="/dashboard" class="btn btn-secondary">Cancel</a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
